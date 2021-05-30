@@ -9,9 +9,10 @@ require_once 'Services\Token.php';
 use DateTimeInterface;
 use PDO;
 use Services\OriginalLink;
+use Services\Storage;
 use Services\Token;
 
-class ShortLinkStorage extends Connection
+class ShortLinkStorage extends Connection implements Storage
 {
     private const NAME_TABLE = 'short_links';
     private const FIELD_TOKEN = 'token';

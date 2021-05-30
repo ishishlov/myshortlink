@@ -2,16 +2,17 @@
 
 namespace Services;
 
-require_once 'Views\Blocks\Form.php';
-require_once 'Views\Blocks\PageNotFound.php';
-require_once 'Views\Index.php';
+require_once 'Views\Html\Blocks\Form.php';
+require_once 'Views\Html\Blocks\PageNotFound.php';
+require_once 'Views\Html\Index.php';
 require_once 'Services\OriginalLink.php';
 require_once 'Services\MyShortLink.php';
 require_once 'Services\Redirection.php';
 
-use Views\Blocks\Form;
-use Views\Blocks\PageNotFound;
-use Views\Index;
+use Models\ShortLinkStorage;
+use Views\Html\Blocks\Form;
+use Views\Html\Blocks\PageNotFound;
+use Views\Html\Index;
 
 class Route
 {
@@ -21,49 +22,47 @@ class Route
     private $urlArray;
     private $param;
 
-    public function __construct(?string $url)
+    private function __construct(?string $url)
     {
         $this->url = trim($url);
         $this->urlArray = explode('/', $this->url);
         $this->param = trim($this->urlArray[1]);
     }
 
+    public static function create(?string $url): self
+    {
+        return new self($url);
+    }
+
     public function routing(): void
     {
         if (isset($_POST['link'])) {
             $link = OriginalLink::create($_POST['link']);
-            MyShortLink::createTokenAndShowShortLink($link);
+            MyShortLink::createTokenAndShowShortLink($link, new ShortLinkStorage());
         }
 
         if ($this->isIndexPage()) {
-            Index::render(Form::getHtml());
+            Index::render(Form::create());
         }
 
         if ($this->isPageNotFound()) {
-            Index::render(PageNotFound::getHtml());
+            Index::render(PageNotFound::create());
         }
 
-        Redirection::getLinkAndRedirect($this->getParam());
+        Redirection::getLinkAndRedirect($this->param, new ShortLinkStorage());
     }
 
-    public function isIndexPage(): bool
+    private function isIndexPage(): bool
     {
         return !$this->url  || $this->url  === '/' || $this->url  === 'index' || $this->url === 'index.php';
     }
 
-    public function isPageNotFound(): bool
+    private function isPageNotFound(): bool
     {
         if (count($this->urlArray) > 2) {
             return true;
         }
 
-        $param = trim($this->urlArray[1]);
-
-        return mb_strlen($param) != self::PARAM_SIZE;
-    }
-
-    public function getParam(): string
-    {
-        return $this->param;
+        return mb_strlen($this->param) != self::PARAM_SIZE;
     }
 }
