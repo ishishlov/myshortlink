@@ -19,14 +19,6 @@ class ShortLinkStorage extends Connection implements Storage
     private const FIELD_ORIGINAL_LINK = 'original_link';
     private const FIELD_DATE_CREATE = 'date_create';
 
-    /** @var PDO|null */
-    protected $db = null;
-
-    public function __construct()
-    {
-        $this->db = (new Connection())->getInstance();
-    }
-
     public function getOriginalLink(string $token): ?string
     {
         $query = sprintf(

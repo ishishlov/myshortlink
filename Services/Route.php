@@ -2,6 +2,7 @@
 
 namespace Services;
 
+require_once 'Config\Database.php';
 require_once 'Views\Html\Blocks\Form.php';
 require_once 'Views\Html\Blocks\PageNotFound.php';
 require_once 'Views\Html\Index.php';
@@ -9,6 +10,7 @@ require_once 'Services\OriginalLink.php';
 require_once 'Services\MyShortLink.php';
 require_once 'Services\Redirection.php';
 
+use Config\Database;
 use Models\ShortLinkStorage;
 use Views\Html\Blocks\Form;
 use Views\Html\Blocks\PageNotFound;
@@ -36,9 +38,11 @@ class Route
 
     public function routing(): void
     {
+        $databaseConfig = new Database();
+
         if (isset($_POST['link'])) {
             $link = OriginalLink::create($_POST['link']);
-            MyShortLink::createTokenAndShowShortLink($link, new ShortLinkStorage());
+            MyShortLink::createTokenAndShowShortLink($link, new ShortLinkStorage($databaseConfig));
         }
 
         if ($this->isIndexPage()) {
@@ -49,7 +53,7 @@ class Route
             Index::render(PageNotFound::create());
         }
 
-        Redirection::getLinkAndRedirect($this->param, new ShortLinkStorage());
+        Redirection::getLinkAndRedirect($this->param, new ShortLinkStorage($databaseConfig));
     }
 
     private function isIndexPage(): bool

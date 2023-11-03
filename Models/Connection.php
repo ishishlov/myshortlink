@@ -7,34 +7,34 @@ use PDOException;
 
 class Connection {
 
-    private $_db = null;
+    /** @var PDO */
+    protected $db;
 
-    const DEBUG_ENABLED = true;
-    const CONFIG_PATH = __DIR__ . '/../config.ini';
-
-    public function getInstance() {
-        if (!$this->_db) {
-            $this->connect();
-        }
-        return $this->_db;
+    public function __construct(DbConfig $config)
+    {
+        $this->setInstance($config);
     }
 
-    private function connect() {
-        $config =  parse_ini_file(self::CONFIG_PATH, true);
-        $port = $config['SQL']['port'] ? ';port=' . $config['SQL']['port'] : '';
+    private function setInstance(DbConfig $config): void
+    {
+        if (!$this->db) {
+            $this->connect($config);
+        }
+    }
 
-        $debug = self::DEBUG_ENABLED ? [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION] : [];
+    private function connect(DbConfig $config): void
+    {
+        $debug = $config->isDebugMode() ? [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION] : [];
         try {
-            $this->_db = new PDO(
-                'mysql:dbname=' . $config['SQL']['name'] . ';host=' . $config['SQL']['host'] . $port,
-                $config['SQL']['login'],
-                $config['SQL']['password'],
+            $this->db = new PDO(
+                $config->getDsn(),
+                $config->getLogin(),
+                $config->getPassword(),
                 $debug
             );
-            $this->_db->query("SET NAMES 'utf8'");
+            $this->db->query("SET NAMES 'utf8'");
         } catch (PDOException $e) {
             die($e->getMessage());
         }
     }
-
 }
