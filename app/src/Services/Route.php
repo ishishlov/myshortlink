@@ -1,17 +1,9 @@
 <?php
 
-namespace Services;
-
-require_once 'Config\Database.php';
-require_once 'Views\Html\Blocks\Form.php';
-require_once 'Views\Html\Blocks\PageNotFound.php';
-require_once 'Views\Html\Index.php';
-require_once 'Services\OriginalLink.php';
-require_once 'Services\MyShortLink.php';
-require_once 'Services\Redirection.php';
+namespace App\Services;
 
 use Config\Database;
-use Models\ShortLinkStorage;
+use App\Models\ShortLinkStorage;
 use Views\Html\Blocks\Form;
 use Views\Html\Blocks\PageNotFound;
 use Views\Html\Index;

@@ -1,16 +1,12 @@
 <?php
 
-namespace Models;
-
-require_once 'Models\Connection.php';
-require_once 'Services\OriginalLink.php';
-require_once 'Services\Token.php';
+namespace App\Models;
 
 use DateTimeInterface;
 use PDO;
-use Services\OriginalLink;
-use Services\Storage;
-use Services\Token;
+use App\Services\OriginalLink;
+use App\Services\Storage;
+use App\Services\Token;
 
 class ShortLinkStorage extends Connection implements Storage
 {

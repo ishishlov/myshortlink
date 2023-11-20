@@ -2,13 +2,11 @@
 
 namespace Config;
 
-require_once 'Models\DbConfig.php';
-
-use Models\DbConfig;
+use App\Models\DbConfig;
 
 class Database implements DbConfig
 {
-    const CONFIG_PATH = __DIR__ . '/../config.ini';
+    const CONFIG_PATH = __DIR__ . '/../../config.ini';
     const DEBUG_MODE = true;
 
     private $host = '';
@@ -19,8 +17,7 @@ class Database implements DbConfig
 
     public function __construct()
     {
-        $config =  parse_ini_file(self::CONFIG_PATH, true);
-
+        $config = parse_ini_file(self::CONFIG_PATH, true);
         $this->host = empty($config['SQL']['host']) ? $this->host : $config['SQL']['host'];
         $this->port = empty($config['SQL']['port']) ? $this->port : $config['SQL']['port'];
         $this->name = empty($config['SQL']['name']) ? $this->name : $config['SQL']['name'];

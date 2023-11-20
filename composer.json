@@ -1,0 +1,16 @@
+{
+    "name": "ivanshi/my-short-link",
+    "type": "project",
+    "license": "MIT",
+    "description": "Create short link",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/src",
+            "Views\\":"public",
+            "Config\\":"app/config"
+        }
+    },
+    "require":{
+        "ext-pdo":"*"
+    }
+}
