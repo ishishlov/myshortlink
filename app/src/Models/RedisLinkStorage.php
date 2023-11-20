@@ -7,7 +7,7 @@ use App\Services\OriginalLink;
 use App\Services\Storage;
 use App\Services\Token;
 
-class RedisLinkStorage extends RedisService implements Storage
+class RedisLinkStorage extends RedisStorage implements Storage
 {
     private const FIELD_TOKEN = 'token';
     private const FIELD_ORIGINAL_LINK = 'original_link';

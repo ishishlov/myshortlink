@@ -5,7 +5,7 @@ namespace App\Models;
 use Predis\Client;
 use Predis\Response\Status;
 
-class RedisService
+class RedisStorage
 {
     protected Client $client;
 
