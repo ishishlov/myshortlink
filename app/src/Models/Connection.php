@@ -10,19 +10,19 @@ class Connection {
     /** @var PDO */
     protected $db;
 
-    public function __construct(DbConfig $config)
+    public function __construct(StorageConfig $config)
     {
         $this->setInstance($config);
     }
 
-    private function setInstance(DbConfig $config): void
+    private function setInstance(StorageConfig $config): void
     {
         if (!$this->db) {
             $this->connect($config);
         }
     }
 
-    private function connect(DbConfig $config): void
+    private function connect(StorageConfig $config): void
     {
         $debug = $config->isDebugMode() ? [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION] : [];
         try {

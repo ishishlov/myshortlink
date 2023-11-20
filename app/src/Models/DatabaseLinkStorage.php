@@ -8,7 +8,7 @@ use App\Services\OriginalLink;
 use App\Services\Storage;
 use App\Services\Token;
 
-class ShortLinkStorage extends Connection implements Storage
+class DatabaseLinkStorage extends Connection implements Storage
 {
     private const NAME_TABLE = 'short_links';
     private const FIELD_TOKEN = 'token';
@@ -32,7 +32,7 @@ class ShortLinkStorage extends Connection implements Storage
             : $result[self::FIELD_ORIGINAL_LINK];
     }
 
-    public function save(Token $token, OriginalLink $originalLink, DateTimeInterface $dateCreate): bool
+    public function save(Token $token, OriginalLink $originalLink, DateTimeInterface $dateCreate, ?int $ttl = 86400): bool
     {
         $query = sprintf(
             'INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?);',

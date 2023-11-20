@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Config\Database;
-use App\Models\ShortLinkStorage;
+use Exception;
+use Views\html\blocks\Errors;
 use Views\Html\Blocks\Form;
 use Views\Html\Blocks\PageNotFound;
 use Views\Html\Index;
@@ -30,11 +30,20 @@ class Route
 
     public function routing(): void
     {
-        $databaseConfig = new Database();
+        try {
+            $config = new \Config\Storage();
+            $storageConfig = ConfigFactory::create($config->getType());
+            $storage = StorageFactory::create($config->getType(), $storageConfig);
+        } catch (Exception $e) {
+            Index::render(
+                Form::create(),
+                Errors::create($e->getMessage())
+            );
+        }
 
         if (isset($_POST['link'])) {
             $link = OriginalLink::create($_POST['link']);
-            MyShortLink::createTokenAndShowShortLink($link, new ShortLinkStorage($databaseConfig));
+            MyShortLink::createTokenAndShowShortLink($link, $storage);
         }
 
         if ($this->isIndexPage()) {
@@ -45,7 +54,7 @@ class Route
             Index::render(PageNotFound::create());
         }
 
-        Redirection::getLinkAndRedirect($this->param, new ShortLinkStorage($databaseConfig));
+        Redirection::getLinkAndRedirect($this->param, $storage);
     }
 
     private function isIndexPage(): bool

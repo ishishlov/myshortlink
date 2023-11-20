@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-interface DbConfig
+interface StorageConfig
 {
     public function getHost(): string;
 
@@ -17,4 +17,6 @@ interface DbConfig
     public function getDsn(): string;
 
     public function isDebugMode(): bool;
+
+    public static function getType(): string;
 }

@@ -2,12 +2,12 @@
 
 namespace Config;
 
-use App\Models\DbConfig;
+use App\Models\StorageConfig;
 
-class Database implements DbConfig
+class Database extends Common implements StorageConfig
 {
-    const CONFIG_PATH = __DIR__ . '/../../config.ini';
-    const DEBUG_MODE = true;
+    private const TYPE = 'mysql';
+    private const DEBUG_MODE = true;
 
     private $host = '';
     private $port = '';
@@ -18,11 +18,11 @@ class Database implements DbConfig
     public function __construct()
     {
         $config = parse_ini_file(self::CONFIG_PATH, true);
-        $this->host = empty($config['SQL']['host']) ? $this->host : $config['SQL']['host'];
-        $this->port = empty($config['SQL']['port']) ? $this->port : $config['SQL']['port'];
-        $this->name = empty($config['SQL']['name']) ? $this->name : $config['SQL']['name'];
-        $this->login = empty($config['SQL']['login']) ? $this->login : $config['SQL']['login'];
-        $this->password = empty($config['SQL']['password']) ? $this->password : $config['SQL']['password'];
+        $this->host = empty($config['sql']['host']) ? $this->host : $config['sql']['host'];
+        $this->port = empty($config['sql']['port']) ? $this->port : $config['sql']['port'];
+        $this->name = empty($config['sql']['name']) ? $this->name : $config['sql']['name'];
+        $this->login = empty($config['sql']['login']) ? $this->login : $config['sql']['login'];
+        $this->password = empty($config['sql']['password']) ? $this->password : $config['sql']['password'];
     }
 
     public function getHost(): string
@@ -58,5 +58,10 @@ class Database implements DbConfig
     public function isDebugMode(): bool
     {
         return self::DEBUG_MODE;
+    }
+
+    public static function getType(): string
+    {
+        return self::TYPE;
     }
 }
